@@ -4,6 +4,8 @@ services:
     build: ./postgres
     container_name: speed-checker-postgres
     hostname: postgres
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=speed
@@ -21,3 +23,5 @@ services:
     depends_on:
       - speed-checker
       - postgres
+volumes:
+  postgres-db-volume:

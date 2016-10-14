@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pygal
-from pygal.style import DarkStyle
+from pygal.style import DefaultStyle
 from flask import Flask, Response
 import psycopg2
 
@@ -66,7 +66,7 @@ def speed():
         uploads.append(float(row[5]))
 
     # create a bar chart
-    line_chart = pygal.Line(x_label_rotation=90, style=DarkStyle, x_labels_major_every=10, show_minor_x_labels=False)
+    line_chart = pygal.Line(x_label_rotation=90, style=DefaultStyle, x_labels_major_every=10, show_minor_x_labels=False)
     line_chart.title = "Speed test results"
     line_chart.x_labels = datetimes
     line_chart.add('Download (Mbit/s)', downloads)

@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 def connect_to_db():
     try:
-        conn = psycopg2.connect("dbname='speed' user='speed' host='postgres'")
+        conn = psycopg2.connect("dbname='speed' user='speed' host='speed-checker-postgres'")
     except Exception:
         return None
     # get db results, take this out into new function
@@ -19,8 +19,8 @@ def connect_to_db():
 
 
 def get_speed_results(cursor):
-    if cursor is None:
-        return None
+    # if cursor is None:
+    #     return None
     speed_results_query = """SELECT * FROM speed_results
     ORDER BY date ASC, time ASC
     ;"""
@@ -53,8 +53,8 @@ def speed():
     Connect to postgres, get data, graph it, return it via template.
     """
     result = get_speed_results(connect_to_db())
-    if result is None:
-        return ''
+    # if result is None:
+    #     return ''
     datetimes = []
     downloads = []
     uploads = []

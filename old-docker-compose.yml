@@ -1,0 +1,27 @@
+version: '2'
+services:
+  postgres:
+    build: ./postgres
+    container_name: speed-checker-postgres
+    hostname: postgres
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=speed
+      - POSTGRES_DB=speed
+  speed-checker:
+    build: ./speed-checker
+    container_name: speed-checker
+    depends_on:
+      - postgres
+  flask:
+    build: ./flask
+    container_name: speed-checker-flask
+    ports:
+      - "5000:5000"
+    depends_on:
+      - speed-checker
+      - postgres
+volumes:
+  postgres-db-volume:

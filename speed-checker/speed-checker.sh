@@ -25,7 +25,5 @@ output=$(timestamped)
 IFS=', ' read -ra RESULT <<< "$output"
 sqlcommand="INSERT INTO speed_results (date, time, ping, download, upload) VALUES ('${RESULT[0]}', '${RESULT[1]}', '${RESULT[2]}', '${RESULT[3]}', '${RESULT[4]}');"
 
-echo "psql -h postgres -U speed -d speed -c \"${sqlcommand}\""
-psql -h postgres -U speed -d speed -c "${sqlcommand}"
-
-# timestamped >> $logfile && cat $logfile
+echo "psql -h \"speed-checker-postgres\" -U speed -d speed -c \"${sqlcommand}\"" >> $logfile && cat $logfile
+psql -h "speed-checker-postgres" -U speed -d speed -c "${sqlcommand}"

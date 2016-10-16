@@ -28,6 +28,13 @@ def get_speed_results(cursor):
     rows = cursor.fetchall()
     return rows
 
+def get_speed_results_count(cursor):
+    speed_results_query = """SELECT COUNT(*) FROM speed_results
+    ;"""
+    cursor.execute(speed_results_query)
+    row = cursor.fetchone()
+    return row
+
 
 @app.route('/')
 def index():
@@ -52,7 +59,9 @@ def speed():
     """
     Connect to postgres, get data, graph it, return it via template.
     """
-    result = get_speed_results(connect_to_db())
+    cursor = connect_to_db()
+    result = get_speed_results(cursor)
+    count = get_speed_results_count(cursor)
     # if result is None:
     #     return ''
     datetimes = []
@@ -64,14 +73,17 @@ def speed():
         pings.append(float(row[3]))
         downloads.append(float(row[4]))
         uploads.append(float(row[5]))
-
+    
+    num_labels = count[0] // 20
+    
     # create a bar chart
-    line_chart = pygal.Line(x_label_rotation=90, style=DefaultStyle, x_labels_major_every=10, show_minor_x_labels=False)
+    line_chart = pygal.Line(x_label_rotation=90, style=DefaultStyle, x_labels_major_every=num_labels, show_minor_x_labels=False, show_dots=False)
     line_chart.title = "Speed test results"
     line_chart.x_labels = datetimes
     line_chart.add('Download (Mbit/s)', downloads)
     line_chart.add('Upload (Mbit/s)', uploads)
     line_chart.add('Latency (ms)', pings, secondary=True)
+
     return Response(response=line_chart.render(), content_type='image/svg+xml')
 
 

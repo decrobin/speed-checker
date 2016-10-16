@@ -1,7 +1,7 @@
 version: '2'
 services:
   speed-checker-postgres:
-    image: drobinson/speed-checker-postgres
+    image: drobinson/speed-checker-postgres:dev-default
     container_name: speed-checker-postgres
     hostname: speed-checker-postgres
     environment:
@@ -11,12 +11,12 @@ services:
     volumes:
       - speed-checker-postgres-db-volume:/var/lib/postgresql/data
   speed-checker:
-    image: drobinson/speed-checker
+    image: drobinson/speed-checker:dev-default
     container_name: speed-checker
     depends_on:
       - speed-checker-postgres
   speed-checker-flask:
-    image: drobinson/speed-checker-flask
+    image: drobinson/speed-checker-flask:master
     container_name: speed-checker-flask
     ports:
       - "5000:5000"
